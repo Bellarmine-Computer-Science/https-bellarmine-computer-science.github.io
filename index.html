@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carpooling Website</title>
+  <title>Carpooling Website - Login</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
-    <h1>Bellarvroom</h1>
+    <h1>Carpooling Website</h1>
   </header>
 
   <main>
     <section>
       <h2>Login</h2>
+      <div id="login-error-alert" class="alert alert-danger" style="display: none;"></div>
       <form id="login-form">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
@@ -24,50 +25,8 @@
         <button type="submit">Log in</button>
       </form>
     </section>
-
-    <section id="user-profile" style="display: none;">
-      <h2>User Profile</h2>
-      <p>Name: <span id="user-name"></span></p>
-      <p>Email: <span id="user-email"></span></p>
-    </section>
   </main>
 
-  <script type="module">
-    import { supabase } from './app.js'
-
-    document.getElementById('login-form').addEventListener('submit', async (event) => {
-      event.preventDefault();
-
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      const { user, error } = await supabase.auth.signIn({
-        email,
-        password,
-      });
-
-      if (error) {
-        console.error(error);
-        // Handle login error
-      } else {
-        // Login successful, show user profile section
-        document.getElementById('user-profile').style.display = 'block';
-
-        // Fetch and display user data
-        const { data, fetchError } = await supabase
-          .from('users')
-          .select('name, email')
-          .eq('id', user.id);
-
-        if (fetchError) {
-          console.error(fetchError);
-          // Handle error
-        } else {
-          document.getElementById('user-name').textContent = data[0].name;
-          document.getElementById('user-email').textContent = data[0].email;
-        }
-      }
-    });
-  </script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
